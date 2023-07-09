@@ -159,4 +159,21 @@ class TestClass3:
 
         assert totalFked == 2
 
+    def test_bad_input(self):
+        stream = serial_stream(b"12223242526")
+        totalNum = stream.serial_stream_count()
+
+        totalFked = 0
+
+        poppedElement = stream.serial_stream_pop()
+
+        for x in range(0, totalNum - 2, 2):
+            expectedElement = cal_expected_number(poppedElement)
+            poppedElement = stream.serial_stream_pop()
+
+            if poppedElement != expectedElement:
+                totalFked += 1
+
+        assert totalFked == 0
+
 
