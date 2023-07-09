@@ -32,14 +32,20 @@ class serial_stream:
 
     def __init__(self,data):
         self.data = data
+        self.startIndex = 0
     def serial_stream_stud(self):
         print(self.data)
         return self.data
     
     def serial_stream_count(self):
-        return len(self.data)/2
+        return len(self.data)
+    
+    def serial_stream_pop(self):
+        retValue = self.data[self.startIndex:self.startIndex+2]
+        self.startIndex = self.startIndex + 2
+        return retValue
         
-def read_serial_stream():
+def read_serial_stream(data):
     COM = "COM5"
     BAUD = 115200
     ser = serial.Serial(COM, baudrate=BAUD, bytesize=8)
@@ -48,27 +54,28 @@ def read_serial_stream():
     fkedUpMessages = 0
     expectedByte = b'83'
     previousLine = b'69'
-    while 1:
+    serialString = data
+    # while 1:
     
-        serialString = ser.readline()
-        totalMessages += 1
+        # serialString = ser.readline()
+    totalMessages += 1
 
-        firstNumber = serialString[0:2]
+    firstNumber = serialString[0:2]
 
-        if (firstNumber != expectedByte):
-            fkedUpMessages += 1
-            print("previous line: ", previousLine)
-            print("current line: ", serialString)
-            print("")
+    if (firstNumber != expectedByte):
+        fkedUpMessages += 1
+        print("previous line: ", previousLine)
+        print("current line: ", serialString)
+        print("")
 
-            previousLine = serialString
-            expectedByte = cal_expected_number(firstNumber)
+        previousLine = serialString
+        expectedByte = cal_expected_number(firstNumber)
 
-            q.queue.clear()  # clear the queue otherwise the next line will raise exception
-            q1.queue.clear()
+        q.queue.clear()  # clear the queue otherwise the next line will raise exception
+        q1.queue.clear()
             # Very important to use the nowait verison otherwise the thread will block if the queue is already full
-            q.put_nowait(totalMessages)
-            q1.put_nowait(fkedUpMessages)
+        q.put_nowait(totalMessages)
+        q1.put_nowait(fkedUpMessages)
 
 
 q = queue.Queue()
