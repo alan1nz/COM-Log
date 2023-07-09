@@ -37,7 +37,7 @@ class serial_stream:
         return self.data
     
     def serial_stream_count(self):
-        return len(self.data)
+        return len(self.data)/2
         
 def read_serial_stream():
     COM = "COM5"

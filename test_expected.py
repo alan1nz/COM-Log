@@ -29,4 +29,8 @@ class TestClass2:
 
     def test_counting_total(self):
         stream = serial_stream(b'89909192')
+        assert stream.serial_stream_count() == 4
         
+    def test_counting_total1(self):
+        stream = serial_stream(b'838485868788899091929394')
+        assert stream.serial_stream_count() == 12
